@@ -56,6 +56,29 @@ public class Player : MonoBehaviour
             spriteRenderer.flipX = moveInput < 0f;
         }
 
+        PlayerJump();
+
+
+
+        SetAnimation(moveInput);
+        {
+
+            healthImage.fillAmount = health / 100f;
+        }
+
+
+        if(transform.position.y < -14) // fall of the map
+        {
+            Die();
+        }
+    }
+    private void FixedUpdate()
+    {
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+    }
+
+    public void PlayerJump()
+    {
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
@@ -97,26 +120,13 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyUp(KeyCode.Space) || rb.linearVelocity.y <= 0f)
             isJumping = false;
-
-
-
-        SetAnimation(moveInput);
-        {
-
-            healthImage.fillAmount = health / 100f;
-        }
-
-
-        if(transform.position.y < -14) // fall of the map
-        {
-            Die();
-        }
     }
-    private void FixedUpdate()
+
+    public void Stomp()
     {
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+        PlaySFX(jumpClip, 0.1f);
     }
-
     private void SetAnimation(float moveInput)
     {
         if (isGrounded)
@@ -142,6 +152,17 @@ public class Player : MonoBehaviour
             }
         }*/
 
+    }
+
+    public void TakeDamage(int amount = 1)
+    {
+        PlaySFX(hurtClip);
+        health -= 25 * amount;
+        rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+        if (health <= 0)
+        {
+            Die();
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
