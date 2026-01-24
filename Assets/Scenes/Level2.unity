@@ -2713,7 +2713,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62c8427588e55094e80883bf0221478a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NextLevel
-  nextLevelName: Level2
+  nextLevelName: Main Menu
 --- !u!114 &1335504619
 MonoBehaviour:
   m_ObjectHideFlags: 0
