@@ -27,6 +27,7 @@ public class Player : MonoBehaviour
 
     public AudioClip jumpClip;
     public AudioClip hurtClip;
+    public AudioClip deathClip;
 
     private Rigidbody2D rb;
 
@@ -62,7 +63,6 @@ public class Player : MonoBehaviour
 
         SetAnimation(moveInput);
         {
-
             healthImage.fillAmount = health / 100f;
         }
 
@@ -70,6 +70,7 @@ public class Player : MonoBehaviour
         if(transform.position.y < -14) // fall of the map
         {
             Die();
+            PlaySFX(deathClip, 0.1f);
         }
     }
     private void FixedUpdate()
@@ -139,8 +140,8 @@ public class Player : MonoBehaviour
             {
                 animator.Play("Player_Run");
             }
-        }
-        /*else
+        }/*
+        else
         {
             if(rb.linearVelocityY > 0)
             {
@@ -156,9 +157,10 @@ public class Player : MonoBehaviour
 
     public void TakeDamage(int amount = 1)
     {
-        PlaySFX(hurtClip);
+        PlaySFX(hurtClip, 0.1f);
         health -= 25 * amount;
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+        StartCoroutine(BlinkRed());
         if (health <= 0)
         {
             Die();
@@ -169,15 +171,7 @@ public class Player : MonoBehaviour
     {
         if (collision.gameObject.tag == "Damage")
         {
-            PlaySFX(hurtClip);
-            health -= 25;
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-            StartCoroutine(BlinkRed());
-
-            if (health <= 0)
-            {
-                Die();
-            }
+            TakeDamage();
         }
     }
 
@@ -190,7 +184,8 @@ public class Player : MonoBehaviour
 
     private void Die()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+        //UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+        UnityEngine.SceneManagement.SceneManager.LoadScene("GameScene");
     }
 
     private void PlaySFX(AudioClip audioClip, float volume = 1f)
