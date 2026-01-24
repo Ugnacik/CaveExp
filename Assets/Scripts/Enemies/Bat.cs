@@ -4,67 +4,41 @@ using UnityEngine.AI;
 
 public class Bat : MonoBehaviour
 {
-    public float speed = 2f;
-    public float detectionRange = 6;
-    public float updateRate = 0.2f;
-
-
-    //[SerializeField] private Transform _targetToMoveTowards;
-    private Transform player;
-    private NavMeshAgent agent;
-    private float nextUpdateTime;
-
-    private SpriteRenderer spriteRenderer;
-    private Rigidbody2D rb;
+    public float speed;
+    public bool chase = false;
+    public Transform startingPoint;
+    private GameObject player;
+    private Animator animator;
 
     void Start()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        rb = GetComponent<Rigidbody2D>();
-
-        agent = GetComponent<NavMeshAgent>();
-        agent.updateRotation = false;
-        agent.updateUpAxis = false;
-
-        player = GameObject.FindWithTag("Player").transform;
+        player = GameObject.FindGameObjectWithTag("Player");
+        animator = GetComponent<Animator>();
     }
+
     void Update()
     {
-        float distance = Vector2.Distance(transform.position, player.position);
 
-        if (distance <= detectionRange)
+        if (Vector2.Distance(transform.position, player.transform.position) <= 4f)
         {
-            if(Time.time >= nextUpdateTime)
-            {
-                agent.SetDestination(player.position);
-                nextUpdateTime = Time.time + updateRate;
-            }
+            animator.Play("Bat_Fly");
+            chase = true;
         }
-        // Will stop moving if the player is too far
-        /*else
-        {
-            agent.ResetPath();
-        }*/
-
-        changeDirection();
+        if (chase == true)
+            Chase();
+        Flip();
     }
 
-    public void changeDirection()
+    private void Chase()
     {
-        if (rb.linearVelocityX != 0)
-        {
-            if (rb.linearVelocityX > 0)
-            {
-                spriteRenderer.flipX = false;
-            }
-            else
-            {
-                spriteRenderer.flipX = true;
-            }
-        }
+        transform.position = Vector2.MoveTowards(transform.position, player.transform.position, speed * Time.deltaTime); 
     }
-    /*public void moveTowardsPlayer()
+
+    private void Flip()
     {
-        transform.position = Vector2.MoveTowards(transform.position, _targetToMoveTowards.position, speed * Time.deltaTime);
-    }*/
+        if (transform.position.x > player.transform.position.x)
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+        else
+            transform.rotation = Quaternion.Euler(0, 180, 0);
+    }
 }
