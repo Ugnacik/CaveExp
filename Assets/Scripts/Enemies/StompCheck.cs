@@ -2,11 +2,9 @@ using UnityEngine;
 
 public class StompCheck : MonoBehaviour
 {
-    private void OnTriggerEnter2D(Collider2D collision)
+    public void Die()
     {
-        if (collision.GetComponent<EnemyHeadCheck>())
-        {
-            Destroy(transform.parent.gameObject);
-        }
+        Destroy(transform.parent.gameObject);
     }
+
 }

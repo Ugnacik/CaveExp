@@ -2,12 +2,18 @@ using UnityEngine;
 
 public class EnemyHeadCheck : MonoBehaviour
 {
-    [SerializeField] private Player player;
+    private Player player;
+    private void Awake()
+    {
+        player = GetComponentInParent<Player>();
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.GetComponent<StompCheck>())
+        var stomp = collision.GetComponent<StompCheck>();
+        if (stomp)
         {
+            stomp.Die();
             player.Stomp();
         }
     }
