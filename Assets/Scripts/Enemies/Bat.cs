@@ -18,7 +18,6 @@ public class Bat : MonoBehaviour
 
     void Update()
     {
-
         if (Vector2.Distance(transform.position, player.transform.position) <= 4f)
         {
             animator.Play("Bat_Fly");
