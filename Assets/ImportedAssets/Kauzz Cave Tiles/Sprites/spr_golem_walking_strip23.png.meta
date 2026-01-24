@@ -1,0 +1,351 @@
+fileFormatVersion: 2
+guid: f145f0be24974534b8429340a1205140
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 1665388860646664897
+    second: spr_golem_walking_strip23_0
+  - first:
+      213: 2920035496842302289
+    second: spr_golem_walking_strip23_1
+  - first:
+      213: -2578474074551851093
+    second: spr_golem_walking_strip23_2
+  - first:
+      213: 4181633596004878185
+    second: spr_golem_walking_strip23_3
+  - first:
+      213: -1242561839033654370
+    second: spr_golem_walking_strip23_4
+  - first:
+      213: -4803417261901311970
+    second: spr_golem_walking_strip23_5
+  - first:
+      213: -5370630436637306488
+    second: spr_golem_walking_strip23_6
+  - first:
+      213: -1132629574530852375
+    second: spr_golem_walking_strip23_7
+  - first:
+      213: 6855938529447684588
+    second: spr_golem_walking_strip23_8
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: spr_golem_walking_strip23_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 373
+        height: 136
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1caacbb5856ac1710800000000000000
+      internalID: 1665388860646664897
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_golem_walking_strip23_1
+      rect:
+        serializedVersion: 2
+        x: 371
+        y: 0
+        width: 374
+        height: 136
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 15311d830dc068820800000000000000
+      internalID: 2920035496842302289
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_golem_walking_strip23_2
+      rect:
+        serializedVersion: 2
+        x: 743
+        y: 0
+        width: 311
+        height: 136
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ba768c39d7b673cd0800000000000000
+      internalID: -2578474074551851093
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_golem_walking_strip23_3
+      rect:
+        serializedVersion: 2
+        x: 1053
+        y: 0
+        width: 63
+        height: 136
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 967c5bea995280a30800000000000000
+      internalID: 4181633596004878185
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_golem_walking_strip23_4
+      rect:
+        serializedVersion: 2
+        x: 1115
+        y: 0
+        width: 63
+        height: 136
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e9361fc379881cee0800000000000000
+      internalID: -1242561839033654370
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_golem_walking_strip23_5
+      rect:
+        serializedVersion: 2
+        x: 1177
+        y: 0
+        width: 63
+        height: 134
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e10946c2375d65db0800000000000000
+      internalID: -4803417261901311970
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_golem_walking_strip23_6
+      rect:
+        serializedVersion: 2
+        x: 1239
+        y: 0
+        width: 63
+        height: 136
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 881155c9210b775b0800000000000000
+      internalID: -5370630436637306488
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_golem_walking_strip23_7
+      rect:
+        serializedVersion: 2
+        x: 1301
+        y: 0
+        width: 63
+        height: 136
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9e99cf327671840f0800000000000000
+      internalID: -1132629574530852375
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spr_golem_walking_strip23_8
+      rect:
+        serializedVersion: 2
+        x: 1363
+        y: 0
+        width: 63
+        height: 136
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ce9a4a9a4cf252f50800000000000000
+      internalID: 6855938529447684588
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      spr_golem_walking_strip23_0: 1665388860646664897
+      spr_golem_walking_strip23_1: 2920035496842302289
+      spr_golem_walking_strip23_2: -2578474074551851093
+      spr_golem_walking_strip23_3: 4181633596004878185
+      spr_golem_walking_strip23_4: -1242561839033654370
+      spr_golem_walking_strip23_5: -4803417261901311970
+      spr_golem_walking_strip23_6: -5370630436637306488
+      spr_golem_walking_strip23_7: -1132629574530852375
+      spr_golem_walking_strip23_8: 6855938529447684588
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
