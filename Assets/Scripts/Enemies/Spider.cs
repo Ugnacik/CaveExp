@@ -44,7 +44,6 @@ public class Spider : Enemy
 
         if (noGroundAhead || wallAhead)
         {
-            Debug.Log("Flipino");
             Flip();
         }
     }
