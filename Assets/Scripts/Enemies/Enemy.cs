@@ -35,8 +35,6 @@ public class Enemy : MonoBehaviour
             return;
 
         StartCoroutine(FlipDelay());
-        //transform.localScale = new Vector2(-transform.localScale.x, transform.localScale.y);
-        //speed *= -1;
     }
 
     private IEnumerator FlipDelay()

@@ -8,6 +8,8 @@ public class Spider : Enemy
     void Start()
     {
         EnemyInit();
+        speed = 2f;
+        isWaiting = false;
     }
     private void FixedUpdate()
     {
@@ -36,12 +38,13 @@ public class Spider : Enemy
         bool wallAhead = Physics2D.Raycast(
             origin,
             direction,
-            -groundCheckDistance,
+            0.01f,
             groundLayer
         );
 
         if (noGroundAhead || wallAhead)
         {
+            Debug.Log("Flipino");
             Flip();
         }
     }
