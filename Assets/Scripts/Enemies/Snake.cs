@@ -15,7 +15,7 @@ public class Snake : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        rb.linearVelocity = new Vector2(speed, rb.linearVelocity.y);
+        rb.linearVelocityX = speed;
     }
     public void Flip()
     {

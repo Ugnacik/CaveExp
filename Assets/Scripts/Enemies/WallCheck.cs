@@ -3,18 +3,22 @@ using UnityEngine.Tilemaps;
 
 public class WallCheck : MonoBehaviour
 {
-    private Snake snake;
+    private Enemy enemy;
 
     private void Awake()
     {
-        snake = GetComponentInParent<Snake>();
+        enemy = GetComponentInParent<Enemy>();
+        if (enemy == null)
+        {
+            Debug.LogError("WallCheck has no Enemy parent!");
+        }
     }
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Ground")
         {
-            snake.Flip();
+            enemy.Flip();
+            Debug.Log("FLIP");
         }
     }
 }
