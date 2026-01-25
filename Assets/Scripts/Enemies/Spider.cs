@@ -1,49 +1,48 @@
 using UnityEngine;
 
-public class Spider : MonoBehaviour
+public class Spider : Enemy
 {
-    public float speed = 2f;
-    public Transform[] points;
-
-    private int i;
-    private SpriteRenderer spriteRenderer;
-    private Rigidbody2D rb;
-
-
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private float groundCheckDistance = 0.2f;
+    [SerializeField] private LayerMask groundLayer;
     void Start()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        rb = GetComponent<Rigidbody2D>();
+        EnemyInit();
     }
-
-
-    void Update()
+    private void FixedUpdate()
     {
-        if (Vector2.Distance(transform.position, points[i].position) < 0.25f)
+        if (isWaiting)
         {
-            i++;
-            if (i == points.Length)
-            {
-                i = 0;
-            }
+            //animator.Play("Spider");
+            return;
         }
-
-        transform.position = Vector2.MoveTowards(transform.position, points[i].position, speed * Time.deltaTime);
-
-        spriteRenderer.flipX = (transform.position.x - points[i].position.x) > 0f;
+        //animator.Play("Snake_Walk");
+        rb.linearVelocityX = speed;
+        CheckLedgeAndWall();
     }
-
-    public void moveBetweenPoints(Transform[] points, int i)
+    private void CheckLedgeAndWall()
     {
-        if (Vector2.Distance(transform.position, points[i].position) < 0.25f)
+        Vector2 direction = speed > 0 ? Vector2.right : Vector2.left;
+
+        Vector2 origin = (Vector2)groundCheck.position + direction * groundCheckDistance;
+
+        bool noGroundAhead = !Physics2D.Raycast(
+            origin,
+            Vector2.down,
+            groundCheckDistance,
+            groundLayer
+        );
+
+        bool wallAhead = Physics2D.Raycast(
+            origin,
+            direction,
+            -groundCheckDistance,
+            groundLayer
+        );
+
+        if (noGroundAhead || wallAhead)
         {
-            i++;
-            if (i == points.Length)
-            {
-                i = 0;
-            }
+            Flip();
         }
-        transform.position = Vector2.MoveTowards(transform.position, points[i].position, speed * Time.deltaTime);
-        spriteRenderer.flipX = (transform.position.x - points[i].position.x) < 0f;
     }
 }

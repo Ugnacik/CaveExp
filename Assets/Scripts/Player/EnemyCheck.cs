@@ -13,10 +13,9 @@ public class EnemyCheck : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Enemy")
-        {
-            player.TakeDamage();
-            Debug.Log("TakeDamage");
-        }
+        Enemy enemy = collision.GetComponentInParent<Enemy>();
+        if (enemy == null) return;
+
+        player.TakeDamage(enemy.ContactDamage);
     }
 }
