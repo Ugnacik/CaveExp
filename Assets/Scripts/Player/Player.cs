@@ -15,10 +15,10 @@ public class Player : MonoBehaviour
     private float jumpHoldTimer = 0f;
 
     public float moveSpeed = 5f;
-    public float jumpForce = 10f;
-    public float jumpHoldAcceleration = 30f;
+    public float jumpForce = 12f;
+    public float jumpHoldAcceleration = 35f;
     public float maxJumpHoldTime = 0.2f;
-    public float maxJumpSpeed = 16f;
+    public float maxJumpSpeed = 20f;
 
 
     public Transform groundCheck;

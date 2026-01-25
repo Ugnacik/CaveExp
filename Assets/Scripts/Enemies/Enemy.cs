@@ -23,7 +23,7 @@ public class Enemy : MonoBehaviour
         audioSource.volume = volume;
         audioSource.Play();
     }
-    public void Flip()
+    public virtual void Flip()
     {
         spriteRenderer.flipX = !spriteRenderer.flipX;
         speed *= -1;
