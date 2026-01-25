@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -8,7 +9,9 @@ public class Enemy : MonoBehaviour
     protected Animator animator;
     protected AudioSource audioSource;
 
-    [SerializeField] protected float speed = 2f;
+    protected bool isWaiting;
+
+    [SerializeField] protected float speed = -2f;
 
     public void EnemyInit()
     {
@@ -17,6 +20,7 @@ public class Enemy : MonoBehaviour
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
     }
+    
     protected void PlaySFX(AudioClip audioClip, float volume = 1f)
     {
         audioSource.clip = audioClip;
@@ -25,7 +29,29 @@ public class Enemy : MonoBehaviour
     }
     public virtual void Flip()
     {
-        spriteRenderer.flipX = !spriteRenderer.flipX;
-        speed *= -1;
+        if (isWaiting)
+            return;
+
+        StartCoroutine(FlipDelay());
+        //transform.localScale = new Vector2(-transform.localScale.x, transform.localScale.y);
+        //speed *= -1;
     }
+
+    private IEnumerator FlipDelay()
+    {
+        isWaiting = true;
+
+        // stop movement
+        rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+
+        yield return new WaitForSeconds(1f);
+
+        // flip direction
+        transform.localScale = new Vector2(-transform.localScale.x, transform.localScale.y); ;
+
+        speed *= -1;
+
+        isWaiting = false;
+    }
+
 }
