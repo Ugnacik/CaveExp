@@ -14,11 +14,11 @@ public class Player : MonoBehaviour
     private bool isJumping = false;
     private float jumpHoldTimer = 0f;
 
-    public float moveSpeed = 5f;
-    public float jumpForce = 12f;
-    public float jumpHoldAcceleration = 35f;
-    public float maxJumpHoldTime = 0.2f;
-    public float maxJumpSpeed = 20f;
+    public float moveSpeed = 6f;
+    public float jumpForce = 15f;
+    public float jumpHoldAcceleration = 40f;
+    public float maxJumpHoldTime = 0.3f;
+    public float maxJumpSpeed = 25f;
 
 
     public Transform groundCheck;
@@ -52,11 +52,17 @@ public class Player : MonoBehaviour
 
 
         // Flip the sprite based on movement direction
-        if (moveInput != 0f)
+        /*if (moveInput < 0f)
         {
             spriteRenderer.flipX = moveInput < 0f;
+        }*/
+        if (moveInput < 0f && transform.localScale.x > 0f ||
+            moveInput > 0f && transform.localScale.x < 0f)
+        {
+            Vector2 scale = transform.localScale;
+            scale.x *= -1f;
+            transform.localScale = scale;
         }
-
         PlayerJump();
 
 
@@ -185,6 +191,8 @@ public class Player : MonoBehaviour
     private void Die()
     {
         //UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+        
+        //Dying is punished by restarting the game from the first level
         UnityEngine.SceneManagement.SceneManager.LoadScene("GameScene");
     }
 
