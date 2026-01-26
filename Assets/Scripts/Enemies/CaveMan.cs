@@ -12,7 +12,7 @@ public class CaveMan : Enemy
     void Start()
     {
         EnemyInit();
-        speed = 3f;
+        speed = 6f;
         player = GameObject.FindGameObjectWithTag("Player");
         runTrigger = false;
     }

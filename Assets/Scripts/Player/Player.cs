@@ -9,16 +9,16 @@ public class Player : MonoBehaviour
     public int health = 100;
 
     //movement variables
-    public float groundCheckRadius = 0.2f;
+    private float groundCheckRadius = 0.2f;
     private bool isGrounded;
     private bool isJumping = false;
     private float jumpHoldTimer = 0f;
 
-    public float moveSpeed = 6f;
-    public float jumpForce = 15f;
-    public float jumpHoldAcceleration = 40f;
-    public float maxJumpHoldTime = 0.3f;
-    public float maxJumpSpeed = 25f;
+    public float moveSpeed = 10f;
+    public float jumpForce = 5f;
+    public float jumpHoldAcceleration = 50f;
+    public float maxJumpHoldTime = 0.15f;
+    public float maxJumpSpeed = 20f;
 
 
     public Transform groundCheck;
@@ -193,7 +193,7 @@ public class Player : MonoBehaviour
         //UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
         
         //Dying is punished by restarting the game from the first level
-        UnityEngine.SceneManagement.SceneManager.LoadScene("GameScene");
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Game");
     }
 
     private void PlaySFX(AudioClip audioClip, float volume = 1f)

@@ -11,7 +11,7 @@ public class Enemy : MonoBehaviour
 
     protected bool isWaiting;
 
-    [SerializeField] protected float speed = -2f;
+    protected float speed = -4f;
     [SerializeField] protected int contactDamage = 1;
     public int ContactDamage => contactDamage;
 

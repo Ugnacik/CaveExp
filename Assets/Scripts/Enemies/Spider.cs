@@ -8,7 +8,7 @@ public class Spider : Enemy
     void Start()
     {
         EnemyInit();
-        speed = 2f;
+        speed = 4f;
         isWaiting = false;
     }
     private void FixedUpdate()
