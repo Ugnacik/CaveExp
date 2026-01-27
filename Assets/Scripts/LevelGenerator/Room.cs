@@ -16,23 +16,34 @@ public class Room : MonoBehaviour
     [SerializeField] private Tilemap groundTilemap;
     [SerializeField] private TilemapRenderer tilemapRenderer;
 
-    public bool IsMainPath { get; private set; }
+    [Header("Connections (runtime)")]
+    public bool ConnectTop { get; private set; }
+    public bool ConnectRight { get; private set; }
+    public bool ConnectDown { get; private set; }
+    public bool ConnectLeft { get; private set; }
 
-    private void OnDrawGizmos()
+    [System.NonSerialized]
+    public bool IsMainPath;
+
+
+    private void Awake()
     {
-        
-        if (!Application.isPlaying)
-            return;
-        
-        if (IsMainPath)
-        {
-            Gizmos.color = Color.green;
-            Gizmos.DrawWireCube(
-                transform.position + new Vector3(5f, 4f, 0f),
-                new Vector3(10f, 8f, 0.1f)
-            );
-        }
+        // Reset runtime-only state
+        IsMainPath = false;
+        ConnectTop = false;
+        ConnectRight = false;
+        ConnectDown = false;
+        ConnectLeft = false;
     }
+
+    public void ConnectTo(Vector2Int direction)
+    {
+        if (direction == Vector2Int.up) ConnectTop = true;
+        if (direction == Vector2Int.right) ConnectRight = true;
+        if (direction == Vector2Int.down) ConnectDown = true;
+        if (direction == Vector2Int.left) ConnectLeft = true;
+    }
+
 
 
     public void MarkAsMainPath()
@@ -82,5 +93,46 @@ public class Room : MonoBehaviour
             0
         );
     }
+    public void UpdateDebugColor()
+    {
+        if (IsMainPath)
+        {
+            tilemapRenderer.material.color = Color.green;
+            return;
+        }
+
+        if (ConnectTop || ConnectRight || ConnectDown || ConnectLeft)
+        {
+            tilemapRenderer.material.color = Color.cyan;
+            return;
+        }
+
+        tilemapRenderer.material.color = Color.white;
+    }
+
+
+    /*private void OnDrawGizmos()
+    {
+        if (!Application.isPlaying)
+            return;
+
+        Gizmos.color = Color.cyan;
+
+        Vector3 center = transform.position +
+            new Vector3(
+                LevelGenerator.RoomWidth * 0.5f,
+                LevelGenerator.RoomHeight * 0.5f,
+                0f
+            );
+
+        if (ConnectTop)
+            Gizmos.DrawLine(center, center + Vector3.up * 3f);
+        if (ConnectRight)
+            Gizmos.DrawLine(center, center + Vector3.right * 3f);
+        if (ConnectDown)
+            Gizmos.DrawLine(center, center + Vector3.down * 3f);
+        if (ConnectLeft)
+            Gizmos.DrawLine(center, center + Vector3.left * 3f);
+    }*/
 
 }
