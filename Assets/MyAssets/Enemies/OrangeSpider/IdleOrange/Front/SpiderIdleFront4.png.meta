@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: c27b8d62a47cfec48a69f07cc1fd7aac
+guid: 4dd20971ef5704e40b28cf0ac7508332
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7201686270557558537
-    second: SpiderIdleFront2_0
+      213: 1335670885154470949
+    second: SpiderIdleFront4_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -46,7 +46,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -100,7 +100,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: SpiderIdleFront2_0
+      name: SpiderIdleFront4_0
       rect:
         serializedVersion: 2
         x: 0
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 9071464c18781f360800000000000000
-      internalID: 7201686270557558537
+      spriteID: 52cb676e791498210800000000000000
+      internalID: 1335670885154470949
       vertices: []
       indices: 
       edges: []
@@ -125,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      SpiderIdleFront2_0: 7201686270557558537
+      SpiderIdleFront4_0: 1335670885154470949
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

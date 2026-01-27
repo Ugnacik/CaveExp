@@ -15,10 +15,10 @@ public class Spider : Enemy
     {
         if (isWaiting)
         {
-            //animator.Play("Spider");
+            animator.Play("Spider_Idle");
             return;
         }
-        //animator.Play("Snake_Walk");
+        animator.Play("Spider_Run");
         rb.linearVelocityX = speed;
         CheckLedgeAndWall();
     }
