@@ -8,6 +8,8 @@ public class LevelGenerator : MonoBehaviour
 
     [Header("Rooms")]
     [SerializeField] private Room roomPrefab;
+    private Room[,] rooms;
+
 
     [SerializeField] private Transform roomParent;
 
@@ -15,9 +17,46 @@ public class LevelGenerator : MonoBehaviour
     public const int RoomHeight = 8;
     public const float TileSize = 1f;
 
+    private System.Random rng = new System.Random();
+
+
     private void Start()
     {
+        rooms = new Room[roomsHorizontal, roomsVertical];
         GenerateGrid();
+        GenerateMainPath();
+    }
+
+    private void GenerateMainPath()
+    {
+        Debug.Log("Generating main path");
+        int x = rng.Next(0, roomsHorizontal);
+        int y = roomsVertical - 1;
+
+        Room currentRoom = rooms[x, y];
+        currentRoom.MarkAsMainPath();
+
+        while (y > 0)
+        {
+            int direction = rng.Next(0, 3); // 0 = left, 1 = right, 2 = down
+
+            int nextX = x;
+            int nextY = y;
+
+            if (direction == 0) nextX--;
+            else if (direction == 1) nextX++;
+            else nextY--;
+
+            // Prevent leaving grid
+            if (nextX < 0 || nextX >= roomsHorizontal)
+                continue;
+
+            x = nextX;
+            y = nextY;
+
+            currentRoom = rooms[x, y];
+            currentRoom.MarkAsMainPath();
+        }
     }
 
     private void GenerateGrid()
@@ -37,8 +76,17 @@ public class LevelGenerator : MonoBehaviour
                     0f
                 );
 
-                Instantiate(roomPrefab, position, Quaternion.identity, roomParent);
+                Room room = Instantiate(
+                    roomPrefab,
+                    position,
+                    Quaternion.identity,
+                    roomParent
+                );
+
+                room.SetGridIndex(x, y);
+                rooms[x, y] = room;
             }
         }
     }
+
 }
