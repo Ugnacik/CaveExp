@@ -1,10 +1,10 @@
 using UnityEngine;
-
+using UnityEngine.Tilemaps;
 public class LevelGenerator : MonoBehaviour
 {
     [Header("Tiles")]
-    [SerializeField] private Tile entranceTilePrefab;
-    [SerializeField] private Tile exitTilePrefab;
+    [SerializeField] private TileBase entranceTile;
+    [SerializeField] private TileBase exitTile;
 
     [Header("Grid Size")]
     [SerializeField] private int roomsHorizontal = 4;
@@ -21,6 +21,7 @@ public class LevelGenerator : MonoBehaviour
 
     public const int RoomWidth = 10;
     public const int RoomHeight = 8;
+    public const float TileSize = 1f;
 
     public Room[,] Rooms { get; private set; }
 
@@ -30,6 +31,10 @@ public class LevelGenerator : MonoBehaviour
 
     private Room firstRoom;
     private Room lastRoom;
+
+    private Vector2 RoomWorldSize =>
+        new Vector2(RoomWidth * TileSize, RoomHeight * TileSize);
+
 
     private System.Random rng;
 
@@ -111,7 +116,7 @@ public class LevelGenerator : MonoBehaviour
         );
 
         Room instance = Instantiate(prefab, worldPos, Quaternion.identity, roomParent);
-        instance.Index = index;
+        //instance.Index = index;
 
         Rooms[index.x, index.y] = instance;
         return instance;
@@ -133,20 +138,17 @@ public class LevelGenerator : MonoBehaviour
 
     private void PlaceEntranceAndExit()
     {
-        Tile entranceTile = firstRoom.GetSuitableEntranceOrExitTile();
-        Instantiate(
-            entranceTilePrefab,
-            entranceTile.transform.position + Vector3.up,
-            Quaternion.identity
-        );
+        // ENTRANCE
+        Vector3Int entranceCell = firstRoom.GetEntranceCell();
+        Tilemap entranceMap = firstRoom.GetGroundTilemap();
+        entranceMap.SetTile(entranceCell, entranceTile);
 
-        Tile exitTile = lastRoom.GetSuitableEntranceOrExitTile();
-        Instantiate(
-            exitTilePrefab,
-            exitTile.transform.position + Vector3.up,
-            Quaternion.identity
-        );
+        // EXIT
+        Vector3Int exitCell = lastRoom.GetEntranceCell();
+        Tilemap exitMap = lastRoom.GetGroundTilemap();
+        exitMap.SetTile(exitCell, exitTile);
     }
+
 
 
     private bool IsInsideGrid(Vector2Int index)
