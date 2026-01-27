@@ -78,7 +78,7 @@ public class LevelGenerator : MonoBehaviour
             x = nextX;
             y = nextY;
 
-            rooms[x, y].MarkAsMainPath();
+            //rooms[x, y].MarkAsMainPath();
         }
     }
 
