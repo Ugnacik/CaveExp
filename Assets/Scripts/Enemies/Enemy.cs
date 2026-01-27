@@ -11,7 +11,7 @@ public class Enemy : MonoBehaviour
 
     protected bool isWaiting;
 
-    protected float speed = -4f;
+    [SerializeField] protected float speed = -4f;
     [SerializeField] protected int contactDamage = 1;
     public int ContactDamage => contactDamage;
 
@@ -47,7 +47,7 @@ public class Enemy : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         // flip direction
-        transform.localScale = new Vector2(-transform.localScale.x, transform.localScale.y); ;
+        transform.localScale = new Vector2(-transform.localScale.x, transform.localScale.y);
 
         speed *= -1;
 

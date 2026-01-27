@@ -9,6 +9,7 @@ public class Snake : Enemy
     void Start()
     {
         EnemyInit();
+        speed *= -1;
         //animator.Play("Snake_Walk");
     }
     private void FixedUpdate()

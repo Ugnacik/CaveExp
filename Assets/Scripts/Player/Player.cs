@@ -165,7 +165,7 @@ public class Player : MonoBehaviour
     {
         PlaySFX(hurtClip, 0.1f);
         health -= 25 * amount;
-        rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+        rb.linearVelocity = new Vector2(rb.linearVelocity.x, maxJumpSpeed);
         StartCoroutine(BlinkRed());
         if (health <= 0)
         {
@@ -184,7 +184,7 @@ public class Player : MonoBehaviour
     private IEnumerator BlinkRed()
     {
         spriteRenderer.color = Color.red;
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.2f);
         spriteRenderer.color = Color.white;
     }
 

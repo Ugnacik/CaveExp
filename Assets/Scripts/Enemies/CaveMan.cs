@@ -12,7 +12,6 @@ public class CaveMan : Enemy
     void Start()
     {
         EnemyInit();
-        speed = 6f;
         player = GameObject.FindGameObjectWithTag("Player");
         runTrigger = false;
     }
@@ -22,7 +21,7 @@ public class CaveMan : Enemy
         {
             if (Vector2.Distance(transform.position, player.transform.position) <= 4f)
             {
-                if (transform.position.x > player.transform.position.x)
+                if (transform.position.x < player.transform.position.x)
                 {
                     transform.localScale = new Vector2(-transform.localScale.x, transform.localScale.y); ;
                     speed *= -1;
