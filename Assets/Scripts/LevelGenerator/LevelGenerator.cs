@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -16,7 +17,17 @@ public class LevelGenerator : MonoBehaviour
 
     [SerializeField] private GameObject entrancePrefab;
     [SerializeField] private GameObject exitPrefab;
+
+    [Header("Player")]
     [SerializeField] private GameObject playerPrefab;
+
+
+    [Header("Enemies")]
+    [SerializeField] private GameObject[] enemyPrefabs;
+    [SerializeField] private float enemySpawnChance = 0.5f;
+    [SerializeField] private int maxEnemiesPerRoom = 3;
+
+
 
 
 
@@ -49,7 +60,9 @@ public class LevelGenerator : MonoBehaviour
         CarveAllDoors();
         IdentifyEntranceAndExit();
         PlaceEntranceAndExit();
-        SpawnPlayer();
+        GameManager.Instance.SpawnPlayerAtEntrance(entranceRoom);
+        SpawnEnemies();
+
 
         /*
         //Validation
@@ -75,7 +88,7 @@ public class LevelGenerator : MonoBehaviour
         while (y > 0)
         {
             // Optional sideways wandering
-            int sidewaysMoves = rng.Next(0, 3); // 0–2 sideways moves
+            int sidewaysMoves = rng.Next(1, 3); // 1–2 sideways moves
 
             for (int i = 0; i < sidewaysMoves; i++)
             {
@@ -106,15 +119,69 @@ public class LevelGenerator : MonoBehaviour
             rooms[x, y].MarkAsMainPath();
         }
     }
-    private void SpawnPlayer()
+    private void SpawnEnemies()
     {
-        if (entranceRoom == null)
-            return;
+        for (int y = 0; y < roomsVertical; y++)
+        {
+            for (int x = 0; x < roomsHorizontal; x++)
+            {
+                Room room = rooms[x, y];
+                if (room == null)
+                    continue;
 
-        Vector3 spawnPosition = GetSafeSpawnPosition(entranceRoom);
+                // Skip entrance room only
+                if (room == entranceRoom)
+                    continue;
 
-        Instantiate(playerPrefab, spawnPosition, Quaternion.identity);
+
+                // Random chance to spawn enemies
+                if (rng.NextDouble() > enemySpawnChance)
+                    continue;
+
+                int enemyCount = rng.Next(1, maxEnemiesPerRoom + 1);
+                for (int i = 0; i < enemyCount; i++)
+                {
+                    SpawnEnemyInRoom(room);
+                }
+
+            }
+        }
     }
+    private void SpawnEnemyInRoom(Room room)
+    {
+        Tilemap tilemap = room.GetGroundTilemap();
+
+        int width = RoomWidth;
+        int height = RoomHeight;
+
+        // Try multiple positions
+        for (int attempt = 0; attempt < 10; attempt++)
+        {
+            int randomX = rng.Next(1, width - 1);
+
+            // Find floor in that column
+            for (int y = height - 1; y >= 0; y--)
+            {
+                Vector3Int cell = new Vector3Int(randomX, y, 0);
+
+                if (tilemap.HasTile(cell))
+                {
+                    Vector3 worldPos = tilemap.CellToWorld(cell);
+                    worldPos.y += tilemap.cellSize.y;
+
+                    GameObject enemyPrefab =
+                        enemyPrefabs[rng.Next(enemyPrefabs.Length)];
+
+                    Instantiate(enemyPrefab, worldPos, Quaternion.identity);
+
+                    return;
+                }
+            }
+        }
+    }
+
+
+
     private Vector3 GetSafeSpawnPosition(Room room)
     {
         Tilemap tilemap = room.GetGroundTilemap();

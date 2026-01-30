@@ -160,6 +160,11 @@ public class Player : MonoBehaviour
         }*/
 
     }
+    public void SetHealthUI(Image image)
+    {
+        healthImage = image;
+    }
+
 
     public void TakeDamage(int amount = 1)
     {
@@ -193,7 +198,7 @@ public class Player : MonoBehaviour
         //UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
         
         //Dying is punished by restarting the game from the first level
-        UnityEngine.SceneManagement.SceneManager.LoadScene("Game");
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Room");
     }
 
     private void PlaySFX(AudioClip audioClip, float volume = 1f)
