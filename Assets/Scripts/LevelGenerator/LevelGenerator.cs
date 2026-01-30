@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class LevelGenerator : MonoBehaviour
@@ -32,13 +32,24 @@ public class LevelGenerator : MonoBehaviour
     private void Start()
     {
         rooms = new Room[roomsHorizontal, roomsVertical];
+
         //GenerateGrid();
         GenerateMainPath();
         FillSideRooms();
         GenerateConnections();
+        CarveAllDoors();
+
+
+        //Validation
+        ValidateMainPath();
+        ValidateConnections();
+        ValidateIsolation();
+
+        //Debug
         UpdateRoomDebugColors();
     }
-    private void UpdateRoomDebugColors()
+
+    private void CarveAllDoors()
     {
         for (int y = 0; y < roomsVertical; y++)
         {
@@ -46,7 +57,89 @@ public class LevelGenerator : MonoBehaviour
             {
                 Room room = rooms[x, y];
                 if (room != null)
+                    room.CarveDoors();
+            }
+        }
+    }
+
+    private void ValidateMainPath()
+    {
+        int startCount = 0;
+        int bottomCount = 0;
+
+        for (int x = 0; x < roomsHorizontal; x++)
+        {
+            if (rooms[x, roomsVertical - 1].IsMainPath)
+                startCount++;
+
+            if (rooms[x, 0].IsMainPath)
+                bottomCount++;
+        }
+
+        Debug.Log($"Top row main rooms: {startCount}");
+        Debug.Log($"Bottom row main rooms: {bottomCount}");
+    }
+    private void ValidateIsolation()
+    {
+        for (int y = 0; y < roomsVertical; y++)
+        {
+            for (int x = 0; x < roomsHorizontal; x++)
+            {
+                Room room = rooms[x, y];
+                if (room == null) continue;
+
+                bool hasConnection =
+                    room.ConnectTop ||
+                    room.ConnectRight ||
+                    room.ConnectDown ||
+                    room.ConnectLeft;
+
+                if (!hasConnection)
+                    Debug.LogWarning($"Isolated room at {x},{y}");
+            }
+        }
+    }
+
+    private void ValidateConnections()
+    {
+        for (int y = 0; y < roomsVertical; y++)
+        {
+            for (int x = 0; x < roomsHorizontal; x++)
+            {
+                Room room = rooms[x, y];
+                if (room == null) continue;
+
+                if (room.ConnectRight)
+                {
+                    Room neighbor = rooms[x + 1, y];
+                    if (neighbor == null || !neighbor.ConnectLeft)
+                        Debug.LogError($"One-way connection at {x},{y} → RIGHT");
+                }
+
+                if (room.ConnectTop)
+                {
+                    Room neighbor = rooms[x, y + 1];
+                    if (neighbor == null || !neighbor.ConnectDown)
+                        Debug.LogError($"One-way connection at {x},{y} → UP");
+                }
+            }
+        }
+    }
+
+
+    private void UpdateRoomDebugColors()
+    {
+        for (int y = 0; y < roomsVertical; y++)
+        {
+            for (int x = 0; x < roomsHorizontal; x++)
+            {
+                Room room = rooms[x, y];
+                
+                if (room != null)
+                {
                     room.UpdateDebugColor();
+                    //Debug.Log($"Room {room.GridIndex} | MainPath={room.IsMainPath}");
+                }    
             }
         }
     }
@@ -58,7 +151,6 @@ public class LevelGenerator : MonoBehaviour
 
         Room startRoom = GetCompatibleRoom(PathDirection.Down);
         PlaceRoom(startRoom, x, y);
-
         rooms[x, y].MarkAsMainPath();
 
         while (y > 0)
@@ -78,7 +170,7 @@ public class LevelGenerator : MonoBehaviour
             x = nextX;
             y = nextY;
 
-            //rooms[x, y].MarkAsMainPath();
+            rooms[x, y].MarkAsMainPath();
         }
     }
 

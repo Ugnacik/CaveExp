@@ -745,7 +745,7 @@ GameObject:
   - component: {fileID: 4861757297919495098}
   - component: {fileID: 6634078202823538473}
   m_Layer: 0
-  m_Name: Room_Normal
+  m_Name: Room_Normal_Openings
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -784,3 +784,4 @@ MonoBehaviour:
   down: 0
   left: 1
   groundTilemap: {fileID: 4720387738327422772}
+  tilemapRenderer: {fileID: 0}

@@ -44,12 +44,64 @@ public class Room : MonoBehaviour
         if (direction == Vector2Int.left) ConnectLeft = true;
     }
 
+    public void CarveDoors()
+    {
+        if (groundTilemap == null)
+            return;
+
+        int centerX = LevelGenerator.RoomWidth / 2;
+        int centerY = LevelGenerator.RoomHeight / 2;
+
+        int doorHalfWidth = 1; // 2 tiles wide
+
+        // TOP
+        if (ConnectTop)
+        {
+            for (int i = -doorHalfWidth; i <= doorHalfWidth; i++)
+            {
+                Vector3Int pos = new Vector3Int(centerX + i, LevelGenerator.RoomHeight - 1, 0);
+                groundTilemap.SetTile(pos, null);
+            }
+        }
+
+        // DOWN
+        if (ConnectDown)
+        {
+            for (int i = -doorHalfWidth; i <= doorHalfWidth; i++)
+            {
+                Vector3Int pos = new Vector3Int(centerX + i, 0, 0);
+                groundTilemap.SetTile(pos, null);
+            }
+        }
+
+        // LEFT
+        if (ConnectLeft)
+        {
+            for (int i = -doorHalfWidth; i <= doorHalfWidth; i++)
+            {
+                Vector3Int pos = new Vector3Int(0, centerY + i, 0);
+                groundTilemap.SetTile(pos, null);
+            }
+        }
+
+        // RIGHT
+        if (ConnectRight)
+        {
+            for (int i = -doorHalfWidth; i <= doorHalfWidth; i++)
+            {
+                Vector3Int pos = new Vector3Int(LevelGenerator.RoomWidth - 1, centerY + i, 0);
+                groundTilemap.SetTile(pos, null);
+            }
+        }
+        //groundTilemap.RefreshAllTiles();
+
+    }
 
 
     public void MarkAsMainPath()
     {
         IsMainPath = true;
-        tilemapRenderer.material.color = Color.green;
+        //tilemapRenderer.material.color = Color.green;
     }
 
     public void SetGridIndex(int x, int y)
@@ -103,7 +155,7 @@ public class Room : MonoBehaviour
 
         if (ConnectTop || ConnectRight || ConnectDown || ConnectLeft)
         {
-            tilemapRenderer.material.color = Color.cyan;
+            tilemapRenderer.material.color = Color.red;
             return;
         }
 
