@@ -49,17 +49,20 @@ public class Room : MonoBehaviour
         if (groundTilemap == null)
             return;
 
-        int centerX = LevelGenerator.RoomWidth / 2;
-        int centerY = LevelGenerator.RoomHeight / 2;
+        int width = LevelGenerator.RoomWidth;   // 10
+        int height = LevelGenerator.RoomHeight; // 8
 
-        int doorHalfWidth = 1; // 2 tiles wide
+        int centerX = width / 2;   // 5
+        int centerY = height / 2;  // 4
+
+        int doorHalfWidth = 1; // 3 tiles wide
 
         // TOP
         if (ConnectTop)
         {
             for (int i = -doorHalfWidth; i <= doorHalfWidth; i++)
             {
-                Vector3Int pos = new Vector3Int(centerX + i, LevelGenerator.RoomHeight - 1, 0);
+                Vector3Int pos = new Vector3Int(centerX + i, height - 1, 0);
                 groundTilemap.SetTile(pos, null);
             }
         }
@@ -89,12 +92,12 @@ public class Room : MonoBehaviour
         {
             for (int i = -doorHalfWidth; i <= doorHalfWidth; i++)
             {
-                Vector3Int pos = new Vector3Int(LevelGenerator.RoomWidth - 1, centerY + i, 0);
+                Vector3Int pos = new Vector3Int(width - 1, centerY + i, 0);
                 groundTilemap.SetTile(pos, null);
             }
         }
-        //groundTilemap.RefreshAllTiles();
 
+        groundTilemap.RefreshAllTiles();
     }
 
 

@@ -10,6 +10,12 @@ public class LevelGenerator : MonoBehaviour
     [Header("Rooms")]
     [SerializeField] private Room[] roomPrefabs;
     private Room[,] rooms;
+    private Room entranceRoom;
+    private Room exitRoom;
+
+    [SerializeField] private GameObject entrancePrefab;
+    [SerializeField] private GameObject exitPrefab;
+
 
 
     [SerializeField] private Transform roomParent;
@@ -38,6 +44,7 @@ public class LevelGenerator : MonoBehaviour
         FillSideRooms();
         GenerateConnections();
         CarveAllDoors();
+        IdentifyEntranceAndExit();
 
 
         //Validation
@@ -49,6 +56,28 @@ public class LevelGenerator : MonoBehaviour
         UpdateRoomDebugColors();
     }
 
+    private void IdentifyEntranceAndExit()
+    {
+        // Top row
+        for (int x = 0; x < roomsHorizontal; x++)
+        {
+            if (rooms[x, roomsVertical - 1].IsMainPath)
+            {
+                entranceRoom = rooms[x, roomsVertical - 1];
+                break;
+            }
+        }
+
+        // Bottom row
+        for (int x = 0; x < roomsHorizontal; x++)
+        {
+            if (rooms[x, 0].IsMainPath)
+            {
+                exitRoom = rooms[x, 0];
+                break;
+            }
+        }
+    }
     private void CarveAllDoors()
     {
         for (int y = 0; y < roomsVertical; y++)
@@ -149,30 +178,45 @@ public class LevelGenerator : MonoBehaviour
         int x = rng.Next(0, roomsHorizontal);
         int y = roomsVertical - 1;
 
+        // Place first room
         Room startRoom = GetCompatibleRoom(PathDirection.Down);
         PlaceRoom(startRoom, x, y);
         rooms[x, y].MarkAsMainPath();
 
         while (y > 0)
         {
-            PathDirection direction = GetNextDirection(x, y);
+            // Optional sideways wandering
+            int sidewaysMoves = rng.Next(0, 3); // 0–2 sideways moves
 
-            int nextX = x;
-            int nextY = y;
+            for (int i = 0; i < sidewaysMoves; i++)
+            {
+                int direction = rng.Next(0, 2); // 0 = left, 1 = right
+                int nextX = x + (direction == 0 ? -1 : 1);
 
-            if (direction == PathDirection.Left) nextX--;
-            if (direction == PathDirection.Right) nextX++;
-            if (direction == PathDirection.Down) nextY--;
+                if (nextX < 0 || nextX >= roomsHorizontal)
+                    continue;
 
-            Room nextRoom = GetCompatibleRoom(direction);
-            PlaceRoom(nextRoom, nextX, nextY);
+                Room sideRoom = GetCompatibleRoom(
+                    direction == 0 ? PathDirection.Left : PathDirection.Right
+                );
 
-            x = nextX;
+                PlaceRoom(sideRoom, nextX, y);
+
+                x = nextX;
+                rooms[x, y].MarkAsMainPath();
+            }
+
+            // Force downward move
+            int nextY = y - 1;
+
+            Room downRoom = GetCompatibleRoom(PathDirection.Down);
+            PlaceRoom(downRoom, x, nextY);
+
             y = nextY;
-
             rooms[x, y].MarkAsMainPath();
         }
     }
+
 
     private Room GetCompatibleRoom(PathDirection direction)
     {
