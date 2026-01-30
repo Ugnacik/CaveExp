@@ -11,9 +11,14 @@ public class LevelGenerator : MonoBehaviour
 
     [Header("Rooms")]
     [SerializeField] private Room[] roomPrefabs;
+    [SerializeField] private Transform roomParent;
+    
     private Room[,] rooms;
     private Room entranceRoom;
     private Room exitRoom;
+
+    public const int RoomWidth = 16;
+    public const int RoomHeight = 12;
 
     [SerializeField] private GameObject entrancePrefab;
     [SerializeField] private GameObject exitPrefab;
@@ -27,15 +32,6 @@ public class LevelGenerator : MonoBehaviour
     [SerializeField] private float enemySpawnChance = 0.5f;
     [SerializeField] private int maxEnemiesPerRoom = 3;
 
-
-
-
-
-
-    [SerializeField] private Transform roomParent;
-
-    public const int RoomWidth = 10;
-    public const int RoomHeight = 8;
     public const float TileSize = 1f;
 
     private System.Random rng = new System.Random();
@@ -57,9 +53,12 @@ public class LevelGenerator : MonoBehaviour
         GenerateMainPath();
         FillSideRooms();
         GenerateConnections();
+
         CarveAllDoors();
+        GenerateInteriors();
         IdentifyEntranceAndExit();
         PlaceEntranceAndExit();
+
         GameManager.Instance.SpawnPlayerAtEntrance(entranceRoom);
         SpawnEnemies();
 
@@ -119,6 +118,19 @@ public class LevelGenerator : MonoBehaviour
             rooms[x, y].MarkAsMainPath();
         }
     }
+    private void GenerateInteriors()
+    {
+        for (int y = 0; y < roomsVertical; y++)
+        {
+            for (int x = 0; x < roomsHorizontal; x++)
+            {
+                Room room = rooms[x, y];
+                if (room != null)
+                    room.GenerateInterior(rng);
+            }
+        }
+    }
+
     private void SpawnEnemies()
     {
         for (int y = 0; y < roomsVertical; y++)
@@ -154,31 +166,33 @@ public class LevelGenerator : MonoBehaviour
         int width = RoomWidth;
         int height = RoomHeight;
 
-        // Try multiple positions
-        for (int attempt = 0; attempt < 10; attempt++)
+        for (int attempt = 0; attempt < 20; attempt++)
         {
-            int randomX = rng.Next(1, width - 1);
+            int x = rng.Next(1, width - 1);
+            int y = rng.Next(1, height - 2);
 
-            // Find floor in that column
-            for (int y = height - 1; y >= 0; y--)
+            Vector3Int current = new Vector3Int(x, y, 0);
+            Vector3Int below = new Vector3Int(x, y - 1, 0);
+            Vector3Int above = new Vector3Int(x, y + 1, 0);
+
+            bool hasGroundBelow = tilemap.HasTile(below);
+            bool spaceFree = !tilemap.HasTile(current);
+            bool spaceAboveFree = !tilemap.HasTile(above);
+
+            if (hasGroundBelow && spaceFree && spaceAboveFree)
             {
-                Vector3Int cell = new Vector3Int(randomX, y, 0);
+                Vector3 worldPos = tilemap.CellToWorld(current);
+                worldPos += tilemap.cellSize / 2f;
 
-                if (tilemap.HasTile(cell))
-                {
-                    Vector3 worldPos = tilemap.CellToWorld(cell);
-                    worldPos.y += tilemap.cellSize.y;
+                GameObject enemyPrefab =
+                    enemyPrefabs[rng.Next(enemyPrefabs.Length)];
 
-                    GameObject enemyPrefab =
-                        enemyPrefabs[rng.Next(enemyPrefabs.Length)];
-
-                    Instantiate(enemyPrefab, worldPos, Quaternion.identity);
-
-                    return;
-                }
+                Instantiate(enemyPrefab, worldPos, Quaternion.identity);
+                return;
             }
         }
     }
+
 
 
 
@@ -247,12 +261,17 @@ public class LevelGenerator : MonoBehaviour
         if (entranceRoom != null)
         {
             Vector3 pos = GetRoomCenterWorldPosition(entranceRoom);
-            Instantiate(entrancePrefab, pos, Quaternion.identity);
+            //pos.y = -0.1f;
+            GameObject entranceObj = Instantiate(entrancePrefab, pos, Quaternion.identity);
+
+            GameManager.Instance.SetEntranceTransform(entranceObj.transform);
+
         }
 
         if (exitRoom != null)
         {
             Vector3 pos = GetRoomCenterWorldPosition(exitRoom);
+            //pos.y = -0.1f;
             Instantiate(exitPrefab, pos, Quaternion.identity);
         }
     }

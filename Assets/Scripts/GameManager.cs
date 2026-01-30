@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private CinemachineCamera virtualCamera;
 
     private GameObject currentPlayer;
+    private Transform entranceTransform;
 
     private void Awake()
     {
@@ -28,12 +29,17 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
     }
 
+    public void SetEntranceTransform(Transform entrance)
+    {
+        entranceTransform = entrance;
+    }
     public void SpawnPlayerAtEntrance(Room entranceRoom)
     {
-        Vector3 spawnPosition = GetSafeSpawnPosition(entranceRoom);
+        if (entranceTransform == null)
+            return;
 
         currentPlayer =
-            Instantiate(playerPrefab, spawnPosition, Quaternion.identity);
+            Instantiate(playerPrefab, entranceTransform.position, Quaternion.identity);
 
         // Assign health UI
         Player player = currentPlayer.GetComponent<Player>();
@@ -43,29 +49,16 @@ public class GameManager : MonoBehaviour
         virtualCamera.Follow = currentPlayer.transform;
     }
 
-    private Vector3 GetSafeSpawnPosition(Room room)
+    private Vector3 GetEntranceSpawnPosition(Room room)
     {
-        Tilemap tilemap = room.GetGroundTilemap();
 
-        int width = LevelGenerator.RoomWidth;
-        int height = LevelGenerator.RoomHeight;
+        float roomWidth = 16;
+        float roomHeight = 12;
 
-        int centerX = width / 2;
-
-        for (int y = height - 1; y >= 0; y--)
-        {
-            Vector3Int cell = new Vector3Int(centerX, y, 0);
-
-            if (tilemap.HasTile(cell))
-            {
-                Vector3 worldPos = tilemap.CellToWorld(cell);
-                worldPos.y += tilemap.cellSize.y;
-                return worldPos;
-            }
-        }
-
-        return room.transform.position;
+        return room.transform.position +
+               new Vector3((roomWidth / 2f) + 1.5f, roomHeight / 2f, 0f);
     }
+
 
     public void WinLevel()
     {

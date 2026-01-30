@@ -44,6 +44,41 @@ public class Room : MonoBehaviour
         if (direction == Vector2Int.left) ConnectLeft = true;
     }
 
+    public void GenerateInterior(System.Random rng)
+    {
+        if (groundTilemap == null)
+            return;
+
+        // Skip if main path (optional)
+        if (IsMainPath)
+            return;
+
+        // 50% chance
+        if (rng.NextDouble() > 0.5)
+            return;
+
+        int width = LevelGenerator.RoomWidth;
+        int height = LevelGenerator.RoomHeight;
+
+        int platformWidth = rng.Next(3, 7);
+        int startX = rng.Next(1, width - platformWidth - 1);
+        int y = rng.Next(3, height - 3);
+
+        for (int i = 0; i < platformWidth; i++)
+        {
+            Vector3Int pos = new Vector3Int(startX + i, y, 0);
+
+            if (!groundTilemap.HasTile(pos))
+            {
+                // Use existing border tile as platform tile
+                groundTilemap.SetTile(pos,
+                    groundTilemap.GetTile(new Vector3Int(0, 0, 0)));
+            }
+        }
+
+        groundTilemap.RefreshAllTiles();
+    }
+
     public void CarveDoors()
     {
         if (groundTilemap == null)

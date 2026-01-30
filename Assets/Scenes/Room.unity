@@ -285,6 +285,7 @@ MonoBehaviour:
   - {fileID: 7785382972876352481, guid: b4abc3b5ed2dba040bf95928b4e24640, type: 3}
   - {fileID: 7785382972876352481, guid: 239de38c953bb4c4284ee287696925d1, type: 3}
   - {fileID: 7785382972876352481, guid: a5b501c36870af34d95c14afab9f0fcf, type: 3}
+  roomParent: {fileID: 1444634709}
   entrancePrefab: {fileID: 4535036348596985571, guid: 3e503e21bf639d04aa5674cbbfef2afd, type: 3}
   exitPrefab: {fileID: 615940863398363369, guid: a255bfbe41d687b4986d97cfeafa313f, type: 3}
   playerPrefab: {fileID: 4695047914736941540, guid: c50a1893c4227324c8c7f5856d5cee8f, type: 3}
@@ -295,7 +296,6 @@ MonoBehaviour:
   - {fileID: 2032693537343894690, guid: 2414bc1396d93fb4a9cb8c20c0d632bc, type: 3}
   enemySpawnChance: 0.5
   maxEnemiesPerRoom: 3
-  roomParent: {fileID: 1444634709}
 --- !u!4 &1259336673
 Transform:
   m_ObjectHideFlags: 0
@@ -602,6 +602,10 @@ PrefabInstance:
     - target: {fileID: 1803524459310454870, guid: 38aba4f71c962534f827a1d519184863, type: 3}
       propertyPath: m_Name
       value: GameManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 7540617108687955009, guid: 38aba4f71c962534f827a1d519184863, type: 3}
+      propertyPath: nextLevelName
+      value: Room
       objectReference: {fileID: 0}
     - target: {fileID: 9106796213639890211, guid: 38aba4f71c962534f827a1d519184863, type: 3}
       propertyPath: m_LocalPosition.x
