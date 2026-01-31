@@ -281,10 +281,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LevelGenerator
   roomsHorizontal: 4
   roomsVertical: 3
+<<<<<<< Updated upstream
   roomPrefabs:
   - {fileID: 7785382972876352481, guid: b4abc3b5ed2dba040bf95928b4e24640, type: 3}
   - {fileID: 7785382972876352481, guid: 239de38c953bb4c4284ee287696925d1, type: 3}
   - {fileID: 7785382972876352481, guid: a5b501c36870af34d95c14afab9f0fcf, type: 3}
+=======
+  mainPathRoomPrefabs:
+  - {fileID: 7785382972876352481, guid: b4abc3b5ed2dba040bf95928b4e24640, type: 3}
+  - {fileID: 7785382972876352481, guid: 239de38c953bb4c4284ee287696925d1, type: 3}
+  - {fileID: 7785382972876352481, guid: a5b501c36870af34d95c14afab9f0fcf, type: 3}
+  sideRoomPrefabs:
+  - {fileID: 8564287772547430713, guid: 959a0b307b04ff4449a705bfde86bd4c, type: 3}
+  - {fileID: 2255412343426679374, guid: d98d998787908774eaad4d45961183fb, type: 3}
+  - {fileID: 1953529243142196702, guid: c888b955f6a908d4b96a6ba51666fd51, type: 3}
+  - {fileID: 2158502277343456743, guid: 7c018bd98ec81e849ac376cb04935500, type: 3}
+  - {fileID: 6368079733846470347, guid: 40ffd538ede6fe54cb58e2d84220d3c8, type: 3}
+  - {fileID: 5730027915914133914, guid: 648837379a840c8488c304f8bfbe5015, type: 3}
+  - {fileID: 9088644093434497654, guid: 86d27019f89c2f94eb2f60e0ec11b427, type: 3}
+  - {fileID: 6986975691571510444, guid: 1c32833616da25042a8d90898bcad54b, type: 3}
+>>>>>>> Stashed changes
   roomParent: {fileID: 1444634709}
   entrancePrefab: {fileID: 4535036348596985571, guid: 3e503e21bf639d04aa5674cbbfef2afd, type: 3}
   exitPrefab: {fileID: 615940863398363369, guid: a255bfbe41d687b4986d97cfeafa313f, type: 3}
