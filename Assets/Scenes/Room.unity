@@ -164,6 +164,8 @@ MonoBehaviour:
   - {fileID: 9088644093434497654, guid: 86d27019f89c2f94eb2f60e0ec11b427, type: 3}
   - {fileID: 6986975691571510444, guid: 1c32833616da25042a8d90898bcad54b, type: 3}
   roomParent: {fileID: 1444634709}
+  entranceRoomPrefab: {fileID: 7061876418556638909, guid: a99e6614617113f4f8cad0e32c96b634, type: 3}
+  exitRoomPrefab: {fileID: 7061876418556638909, guid: a99e6614617113f4f8cad0e32c96b634, type: 3}
   entrancePrefab: {fileID: 4535036348596985571, guid: 3e503e21bf639d04aa5674cbbfef2afd, type: 3}
   exitPrefab: {fileID: 615940863398363369, guid: a255bfbe41d687b4986d97cfeafa313f, type: 3}
   playerPrefab: {fileID: 4695047914736941540, guid: c50a1893c4227324c8c7f5856d5cee8f, type: 3}

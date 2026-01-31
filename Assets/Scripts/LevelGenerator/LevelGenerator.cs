@@ -9,11 +9,15 @@ public class LevelGenerator : MonoBehaviour
     [SerializeField] private int roomsVertical = 3;
 
     [Header("Rooms")]
-    //[SerializeField] private Room EntranceRoom;
     [SerializeField] private Room[] mainPathRoomPrefabs;
     [SerializeField] private Room[] sideRoomPrefabs;
     [SerializeField] private Transform roomParent;
-    
+
+    [Header("Special Rooms")]
+    [SerializeField] private Room entranceRoomPrefab;
+    [SerializeField] private Room exitRoomPrefab;
+
+
     private Room[,] rooms;
     private Room entranceRoom;
     private Room exitRoom;
@@ -75,6 +79,8 @@ public class LevelGenerator : MonoBehaviour
 
     }
 
+    //GetStartMainPathRoom
+    /*
     private Room GetStartMainPathRoom()
     {
         List<Room> candidates = new List<Room>();
@@ -88,17 +94,15 @@ public class LevelGenerator : MonoBehaviour
 
         return candidates[rng.Next(candidates.Count)];
     }
-
+    */
     private void GenerateMainPath()
     {
         int x = rng.Next(0, roomsHorizontal);
         int y = roomsVertical - 1;
 
         // Place first room
-        Room startRoom = GetStartMainPathRoom();
+        PlaceRoom(entranceRoomPrefab, x, y, true);
 
-        PlaceRoom(startRoom, x, y, true);
-        //PlaceRoom(EntranceRoom, x, y, true);
 
         while (y > 0)
         {
@@ -127,11 +131,26 @@ public class LevelGenerator : MonoBehaviour
             int nextY = y - 1;
 
             Room currentRoom = rooms[x, y];
-            Room downRoom = GetCompatibleMainPathRoom(PathDirection.Down, currentRoom);
 
-            PlaceRoom(downRoom, x, nextY, true);
+            // If we're placing the exit
+            if (nextY == 0)
+            {
+                PlaceRoom(exitRoomPrefab, x, nextY, true);
+            }
+            else
+            {
+                Room downRoom = GetCompatibleMainPathRoom(PathDirection.Down, currentRoom);
+                PlaceRoom(downRoom, x, nextY, true);
+            }
+
+            // FORCE vertical connection manually
+            Room newRoom = rooms[x, nextY];
+
+            currentRoom.ConnectTo(Vector2Int.down);
+            newRoom.ConnectTo(Vector2Int.up);
 
             y = nextY;
+
         }
     }
 

@@ -46,9 +46,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Room
   top: 0
-  right: 1
+  right: 0
   down: 0
-  left: 1
+  left: 0
   groundTilemap: {fileID: 8632072701738122582}
   tilemapRenderer: {fileID: 8805304725039193194}
 --- !u!1 &8183336752264559375
