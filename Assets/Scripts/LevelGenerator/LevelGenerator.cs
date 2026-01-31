@@ -41,6 +41,11 @@ public class LevelGenerator : MonoBehaviour
 
     private System.Random rng = new System.Random();
 
+    public enum EnemySpawnType
+    {
+        Ground,
+        Ceiling
+    }
     private enum PathDirection
     {
         Left,
@@ -214,36 +219,65 @@ public class LevelGenerator : MonoBehaviour
     {
         Tilemap tilemap = room.GetGroundTilemap();
 
-        int width = RoomWidth;
-        int height = RoomHeight;
+        GameObject enemyPrefab =
+            enemyPrefabs[rng.Next(enemyPrefabs.Length)];
 
+        Enemy enemyComponent = enemyPrefab.GetComponent<Enemy>();
+
+        if (enemyComponent.spawnType == EnemySpawnType.Ceiling)
+        {
+            SpawnCeilingEnemy(room, tilemap, enemyPrefab);
+        }
+        else
+        {
+            SpawnGroundEnemy(room, tilemap, enemyPrefab);
+        }
+    }
+
+    private void SpawnGroundEnemy(Room room, Tilemap tilemap, GameObject prefab)
+    {
         for (int attempt = 0; attempt < 20; attempt++)
         {
-            int x = rng.Next(1, width - 1);
-            int y = rng.Next(1, height - 2);
+            int x = rng.Next(1, RoomWidth - 1);
+            int y = rng.Next(1, RoomHeight - 2);
 
             Vector3Int current = new Vector3Int(x, y, 0);
             Vector3Int below = new Vector3Int(x, y - 1, 0);
-            Vector3Int above = new Vector3Int(x, y + 1, 0);
 
-            bool hasGroundBelow = tilemap.HasTile(below);
-            bool spaceFree = !tilemap.HasTile(current);
-            bool spaceAboveFree = !tilemap.HasTile(above);
-
-            if (hasGroundBelow && spaceFree && spaceAboveFree)
+            if (!tilemap.HasTile(current) && tilemap.HasTile(below))
             {
                 Vector3 worldPos = tilemap.CellToWorld(current);
                 worldPos += tilemap.cellSize / 2f;
 
-                GameObject enemyPrefab =
-                    enemyPrefabs[rng.Next(enemyPrefabs.Length)];
-
-                Instantiate(enemyPrefab, worldPos, Quaternion.identity);
+                Instantiate(prefab, worldPos, Quaternion.identity);
                 return;
             }
         }
     }
 
+    private void SpawnCeilingEnemy(Room room, Tilemap tilemap, GameObject prefab)
+    {
+        for (int attempt = 0; attempt < 20; attempt++)
+        {
+            int x = rng.Next(1, RoomWidth - 1);
+            int y = rng.Next(2, RoomHeight - 1);
+
+            Vector3Int current = new Vector3Int(x, y, 0);
+            Vector3Int above = new Vector3Int(x, y + 1, 0);
+
+            // Ceiling means tile ABOVE exists
+            if (!tilemap.HasTile(current) && tilemap.HasTile(above))
+            {
+                Vector3 worldPos = tilemap.GetCellCenterWorld(current);
+
+                // Move slightly downward so it visually hangs
+                worldPos.y -= tilemap.cellSize.y * 0.25f;
+
+                Instantiate(prefab, worldPos, Quaternion.identity);
+                return;
+            }
+        }
+    }
 
 
 

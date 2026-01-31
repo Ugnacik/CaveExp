@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Audio;
+using static LevelGenerator;
 
 public class Enemy : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected float speed = -4f;
     [SerializeField] protected int contactDamage = 1;
     public int ContactDamage => contactDamage;
+    public EnemySpawnType spawnType = EnemySpawnType.Ground;
+
 
     public void EnemyInit()
     {
