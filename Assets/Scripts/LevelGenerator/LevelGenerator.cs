@@ -97,16 +97,16 @@ public class LevelGenerator : MonoBehaviour
     */
     private void GenerateMainPath()
     {
-    int x = rng.Next(0, roomsHorizontal);
-    int y = roomsVertical - 1;
+        int x = rng.Next(0, roomsHorizontal);
+        int y = roomsVertical - 1;
 
-    // Place entrance
-    PlaceRoom(entranceRoomPrefab, x, y, true);
-    entranceRoom = rooms[x, y];
+        // Place entrance
+        PlaceRoom(entranceRoomPrefab, x, y, true);
+        entranceRoom = rooms[x, y];
 
         while (y > 0)
         {
-            int movesThisRow = rng.Next(2, roomsHorizontal); 
+            int movesThisRow = rng.Next(2, roomsHorizontal);
             // At least 2 rooms per row
 
             for (int i = 0; i < movesThisRow; i++)
@@ -508,23 +508,25 @@ public class LevelGenerator : MonoBehaviour
                 if (IsInsideGrid(x + 1, y))
                 {
                     Room right = rooms[x + 1, y];
-                    if (right != null)
+                    if (right != null && room.right && right.left)
                     {
                         room.ConnectTo(Vector2Int.right);
                         right.ConnectTo(Vector2Int.left);
                     }
+
                 }
 
                 // UP neighbor
                 if (IsInsideGrid(x, y + 1))
                 {
                     Room up = rooms[x, y + 1];
-                    if (up != null)
+                    if (up != null && room.top && up.down)
                     {
                         room.ConnectTo(Vector2Int.up);
                         up.ConnectTo(Vector2Int.down);
                     }
                 }
+
             }
         }
     }
