@@ -5,8 +5,8 @@ using UnityEngine.Tilemaps;
 public class LevelGenerator : MonoBehaviour
 {
     [Header("Grid Size")]
-    [SerializeField] private int roomsHorizontal = 4;
-    [SerializeField] private int roomsVertical = 3;
+    [SerializeField] private int roomsHorizontal = 5;
+    [SerializeField] private int roomsVertical = 5;
 
     [Header("Rooms")]
     [SerializeField] private Room[] mainPathRoomPrefabs;
@@ -97,62 +97,72 @@ public class LevelGenerator : MonoBehaviour
     */
     private void GenerateMainPath()
     {
-        int x = rng.Next(0, roomsHorizontal);
-        int y = roomsVertical - 1;
+    int x = rng.Next(0, roomsHorizontal);
+    int y = roomsVertical - 1;
 
-        // Place first room
-        PlaceRoom(entranceRoomPrefab, x, y, true);
-
+    // Place entrance
+    PlaceRoom(entranceRoomPrefab, x, y, true);
+    entranceRoom = rooms[x, y];
 
         while (y > 0)
         {
-            int sidewaysMoves = rng.Next(1, 3);
+            int movesThisRow = rng.Next(2, roomsHorizontal); 
+            // At least 2 rooms per row
 
-            for (int i = 0; i < sidewaysMoves; i++)
+            for (int i = 0; i < movesThisRow; i++)
             {
-                int direction = rng.Next(0, 2); // 0 left, 1 right
+                int direction = rng.Next(0, 2);
                 int nextX = x + (direction == 0 ? -1 : 1);
 
                 if (nextX < 0 || nextX >= roomsHorizontal)
                     continue;
 
-                PathDirection dir =
-                    direction == 0 ? PathDirection.Left : PathDirection.Right;
+                if (rooms[nextX, y] != null)
+                    continue;
 
-                Room sideRoom = GetCompatibleMainPathRoom(dir, rooms[x, y]);
-
+                Room sideRoom = GetCompatibleMainPathRoom(
+                    direction == 0 ? PathDirection.Left : PathDirection.Right,
+                    rooms[x, y]
+                );
 
                 PlaceRoom(sideRoom, nextX, y, true);
+
+                // Force horizontal connection
+                rooms[x, y].ConnectTo(
+                    direction == 0 ? Vector2Int.left : Vector2Int.right
+                );
+                rooms[nextX, y].ConnectTo(
+                    direction == 0 ? Vector2Int.right : Vector2Int.left
+                );
 
                 x = nextX;
             }
 
-            // Move down
+            // Now move down
             int nextY = y - 1;
 
-            Room currentRoom = rooms[x, y];
-
-            // If we're placing the exit
             if (nextY == 0)
             {
                 PlaceRoom(exitRoomPrefab, x, nextY, true);
             }
             else
             {
-                Room downRoom = GetCompatibleMainPathRoom(PathDirection.Down, currentRoom);
+                Room downRoom = GetCompatibleMainPathRoom(
+                    PathDirection.Down,
+                    rooms[x, y]
+                );
+
                 PlaceRoom(downRoom, x, nextY, true);
             }
 
-            // FORCE vertical connection manually
-            Room newRoom = rooms[x, nextY];
-
-            currentRoom.ConnectTo(Vector2Int.down);
-            newRoom.ConnectTo(Vector2Int.up);
+            // Force vertical connection
+            rooms[x, y].ConnectTo(Vector2Int.down);
+            rooms[x, nextY].ConnectTo(Vector2Int.up);
 
             y = nextY;
-
         }
     }
+
 
     private void GenerateInteriors()
     {
@@ -277,26 +287,17 @@ public class LevelGenerator : MonoBehaviour
 
     private void IdentifyEntranceAndExit()
     {
-        // Top row
+        // Exit = bottom main path room at same column
         for (int x = 0; x < roomsHorizontal; x++)
         {
-            if (rooms[x, roomsVertical - 1].IsMainPath)
-            {
-                entranceRoom = rooms[x, roomsVertical - 1];
-                break;
-            }
-        }
-
-        // Bottom row
-        for (int x = 0; x < roomsHorizontal; x++)
-        {
-            if (rooms[x, 0].IsMainPath)
+            if (rooms[x, 0] != null && rooms[x, 0].IsMainPath)
             {
                 exitRoom = rooms[x, 0];
                 break;
             }
         }
     }
+
     private void PlaceEntranceAndExit()
     {
         if (entranceRoom != null)
@@ -507,8 +508,7 @@ public class LevelGenerator : MonoBehaviour
                 if (IsInsideGrid(x + 1, y))
                 {
                     Room right = rooms[x + 1, y];
-                    if (right != null &&
-                        room.right && right.left)
+                    if (right != null)
                     {
                         room.ConnectTo(Vector2Int.right);
                         right.ConnectTo(Vector2Int.left);
@@ -519,8 +519,7 @@ public class LevelGenerator : MonoBehaviour
                 if (IsInsideGrid(x, y + 1))
                 {
                     Room up = rooms[x, y + 1];
-                    if (up != null &&
-                        room.top && up.down)
+                    if (up != null)
                     {
                         room.ConnectTo(Vector2Int.up);
                         up.ConnectTo(Vector2Int.down);

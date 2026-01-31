@@ -148,8 +148,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3be3fa98059e4394aa375d632db8a437, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelGenerator
-  roomsHorizontal: 4
-  roomsVertical: 3
+  roomsHorizontal: 5
+  roomsVertical: 5
   mainPathRoomPrefabs:
   - {fileID: 7785382972876352481, guid: b4abc3b5ed2dba040bf95928b4e24640, type: 3}
   - {fileID: 7785382972876352481, guid: 239de38c953bb4c4284ee287696925d1, type: 3}
