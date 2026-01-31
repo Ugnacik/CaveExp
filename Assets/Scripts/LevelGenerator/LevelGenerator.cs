@@ -35,7 +35,7 @@ public class LevelGenerator : MonoBehaviour
     [Header("Enemies")]
     [SerializeField] private GameObject[] enemyPrefabs;
     //[SerializeField] private float enemySpawnChance = 0.5f;
-    [SerializeField] private int maxEnemiesPerRoom = 3;
+    [SerializeField] private int maxEnemiesPerRoom = 2;
 
     public const float TileSize = 1f;
 
@@ -194,8 +194,8 @@ public class LevelGenerator : MonoBehaviour
 
                 // Random chance to spawn enemies
                 double chance = room.IsMainPath
-                    ? 0.25   // safer main path
-                    : 0.6;   // more enemies in side rooms
+                    ? 0.5   // safer main path
+                    : 0.8;   // more enemies in side rooms
 
                 if (rng.NextDouble() > chance)
                     continue;
