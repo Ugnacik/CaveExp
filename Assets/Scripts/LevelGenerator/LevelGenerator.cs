@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -10,7 +9,9 @@ public class LevelGenerator : MonoBehaviour
     [SerializeField] private int roomsVertical = 3;
 
     [Header("Rooms")]
-    [SerializeField] private Room[] roomPrefabs;
+    //[SerializeField] private Room EntranceRoom;
+    [SerializeField] private Room[] mainPathRoomPrefabs;
+    [SerializeField] private Room[] sideRoomPrefabs;
     [SerializeField] private Transform roomParent;
     
     private Room[,] rooms;
@@ -29,7 +30,7 @@ public class LevelGenerator : MonoBehaviour
 
     [Header("Enemies")]
     [SerializeField] private GameObject[] enemyPrefabs;
-    [SerializeField] private float enemySpawnChance = 0.5f;
+    //[SerializeField] private float enemySpawnChance = 0.5f;
     [SerializeField] private int maxEnemiesPerRoom = 3;
 
     public const float TileSize = 1f;
@@ -74,50 +75,66 @@ public class LevelGenerator : MonoBehaviour
 
     }
 
+    private Room GetStartMainPathRoom()
+    {
+        List<Room> candidates = new List<Room>();
+
+        foreach (Room prefab in mainPathRoomPrefabs)
+        {
+            // Start room must support going down
+            if (prefab.down)
+                candidates.Add(prefab);
+        }
+
+        return candidates[rng.Next(candidates.Count)];
+    }
+
     private void GenerateMainPath()
     {
         int x = rng.Next(0, roomsHorizontal);
         int y = roomsVertical - 1;
 
         // Place first room
-        Room startRoom = GetCompatibleRoom(PathDirection.Down);
-        PlaceRoom(startRoom, x, y);
-        rooms[x, y].MarkAsMainPath();
+        Room startRoom = GetStartMainPathRoom();
+
+        PlaceRoom(startRoom, x, y, true);
+        //PlaceRoom(EntranceRoom, x, y, true);
 
         while (y > 0)
         {
-            // Optional sideways wandering
-            int sidewaysMoves = rng.Next(1, 3); // 1–2 sideways moves
+            int sidewaysMoves = rng.Next(1, 3);
 
             for (int i = 0; i < sidewaysMoves; i++)
             {
-                int direction = rng.Next(0, 2); // 0 = left, 1 = right
+                int direction = rng.Next(0, 2); // 0 left, 1 right
                 int nextX = x + (direction == 0 ? -1 : 1);
 
                 if (nextX < 0 || nextX >= roomsHorizontal)
                     continue;
 
-                Room sideRoom = GetCompatibleRoomForMainPathSideways(
-                    direction == 0 ? PathDirection.Left : PathDirection.Right
-                );
+                PathDirection dir =
+                    direction == 0 ? PathDirection.Left : PathDirection.Right;
+
+                Room sideRoom = GetCompatibleMainPathRoom(dir, rooms[x, y]);
 
 
-                PlaceRoom(sideRoom, nextX, y);
+                PlaceRoom(sideRoom, nextX, y, true);
 
                 x = nextX;
-                rooms[x, y].MarkAsMainPath();
             }
 
-            // Force downward move
+            // Move down
             int nextY = y - 1;
 
-            Room downRoom = GetCompatibleRoom(PathDirection.Down);
-            PlaceRoom(downRoom, x, nextY);
+            Room currentRoom = rooms[x, y];
+            Room downRoom = GetCompatibleMainPathRoom(PathDirection.Down, currentRoom);
+
+            PlaceRoom(downRoom, x, nextY, true);
 
             y = nextY;
-            rooms[x, y].MarkAsMainPath();
         }
     }
+
     private void GenerateInteriors()
     {
         for (int y = 0; y < roomsVertical; y++)
@@ -147,8 +164,13 @@ public class LevelGenerator : MonoBehaviour
 
 
                 // Random chance to spawn enemies
-                if (rng.NextDouble() > enemySpawnChance)
+                double chance = room.IsMainPath
+                    ? 0.25   // safer main path
+                    : 0.6;   // more enemies in side rooms
+
+                if (rng.NextDouble() > chance)
                     continue;
+
 
                 int enemyCount = rng.Next(1, maxEnemiesPerRoom + 1);
                 for (int i = 0; i < enemyCount; i++)
@@ -371,13 +393,13 @@ public class LevelGenerator : MonoBehaviour
         }
     }
 
-    
-
+    //GetCompatibleRoomForMainPathSideways
+    /* 
     private Room GetCompatibleRoomForMainPathSideways(PathDirection direction)
     {
         List<Room> candidates = new List<Room>();
 
-        foreach (Room room in roomPrefabs)
+        foreach (Room room in mainPathRoomPrefabs)
         {
             bool supportsDirection =
                 (direction == PathDirection.Left && room.right) ||
@@ -391,36 +413,49 @@ public class LevelGenerator : MonoBehaviour
         if (candidates.Count == 0)
         {
             Debug.LogError("No compatible sideways main-path rooms found!");
-            return roomPrefabs[0];
+            return mainPathRoomPrefabs[0];
         }
 
         return candidates[rng.Next(candidates.Count)];
     }
-
-    private Room GetCompatibleRoom(PathDirection direction)
+    */
+    private Room GetCompatibleMainPathRoom(PathDirection direction, Room currentRoom)
     {
         List<Room> candidates = new List<Room>();
 
-        foreach (Room room in roomPrefabs)
+        foreach (Room prefab in mainPathRoomPrefabs)
         {
-            if (direction == PathDirection.Left && room.right)
-                candidates.Add(room);
+            bool valid = false;
 
-            if (direction == PathDirection.Right && room.left)
-                candidates.Add(room);
+            switch (direction)
+            {
+                case PathDirection.Down:
+                    valid = currentRoom.down && prefab.top;
+                    break;
 
-            if (direction == PathDirection.Down && room.top)
-                candidates.Add(room);
+                case PathDirection.Left:
+                    valid = currentRoom.left && prefab.right;
+                    break;
+
+                case PathDirection.Right:
+                    valid = currentRoom.right && prefab.left;
+                    break;
+            }
+
+            if (valid)
+                candidates.Add(prefab);
         }
 
         if (candidates.Count == 0)
         {
-            Debug.LogError("No compatible rooms found!");
-            return roomPrefabs[0];
+            Debug.LogError("No compatible main path rooms found!");
+            return mainPathRoomPrefabs[0];
         }
 
         return candidates[rng.Next(candidates.Count)];
     }
+
+
 
     private void FillSideRooms()
     {
@@ -432,7 +467,7 @@ public class LevelGenerator : MonoBehaviour
                     continue;
 
                 Room prefab = GetRandomRoom();
-                PlaceRoom(prefab, x, y);
+                PlaceRoom(prefab, x, y, false);
             }
         }
     }
@@ -484,7 +519,7 @@ public class LevelGenerator : MonoBehaviour
 
     private Room GetRandomRoom()
     {
-        return roomPrefabs[rng.Next(roomPrefabs.Length)];
+        return sideRoomPrefabs[rng.Next(sideRoomPrefabs.Length)];
     }
 
     private PathDirection GetNextDirection(int x, int y)
@@ -506,7 +541,7 @@ public class LevelGenerator : MonoBehaviour
     }
 
 
-    private void PlaceRoom(Room prefab, int x, int y)
+    private void PlaceRoom(Room prefab, int x, int y, bool isMainPath)
     {
         if (rooms[x, y] != null)
             return;
@@ -522,8 +557,31 @@ public class LevelGenerator : MonoBehaviour
             0f
         );
 
+        // Prevent identical prefab next to left neighbor
+        if (x > 0 && rooms[x - 1, y] != null &&
+            rooms[x - 1, y].name.Contains(prefab.name))
+        {
+            int safety = 0;
+            while (safety < 10)
+            {
+                prefab = isMainPath
+                    ? mainPathRoomPrefabs[rng.Next(mainPathRoomPrefabs.Length)]
+                    : sideRoomPrefabs[rng.Next(sideRoomPrefabs.Length)];
+
+                if (!rooms[x - 1, y].name.Contains(prefab.name))
+                    break;
+
+                safety++;
+            }
+        }
+
         Room room = Instantiate(prefab, position, Quaternion.identity, roomParent);
+
         room.SetGridIndex(x, y);
+
+        if (isMainPath)
+            room.MarkAsMainPath();
+
         rooms[x, y] = room;
     }
     /*
