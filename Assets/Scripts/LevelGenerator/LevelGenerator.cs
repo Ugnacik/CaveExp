@@ -79,8 +79,9 @@ public class LevelGenerator : MonoBehaviour
         ValidateConnections();
         ValidateIsolation();
         */
+
         //Debug
-        UpdateRoomDebugColors();
+        //UpdateRoomDebugColors();
 
     }
 
