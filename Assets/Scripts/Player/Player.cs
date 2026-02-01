@@ -7,8 +7,13 @@ using UnityEngine.UI;
 public class Player : MonoBehaviour
 {
     public int health = 100;
+    private bool isInvulnerable = false;
+
 
     //movement variables
+    float moveInput;
+    private bool jumpPressed;
+
     private float groundCheckRadius = 0.2f;
     private bool isGrounded;
     private bool isJumping = false;
@@ -18,7 +23,7 @@ public class Player : MonoBehaviour
     public float jumpForce = 5f;
     public float jumpHoldAcceleration = 50f;
     public float maxJumpHoldTime = 0.15f;
-    public float maxJumpSpeed = 20f;
+    public float maxJumpSpeed = 15f;
 
 
     public Transform groundCheck;
@@ -42,11 +47,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float wallCheckDistance = 0.1f;
     private bool isTouchingWall;
 
-    private bool isWallGrabbing;
-    [SerializeField] private float wallSlideSpeed = 2f;
-
-
-
+    [SerializeField] private Whip whip;
 
     private bool isAttacking;
     private float attackCooldown = 0.4f;
@@ -63,8 +64,13 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        float moveInput = Input.GetAxis("Horizontal");
-        rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
+        moveInput = Input.GetAxis("Horizontal");
+
+        if (!(isTouchingWall && !isGrounded))
+        {
+            rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
+        }
+
 
 
         // Flip the sprite based on movement direction
@@ -74,6 +80,12 @@ public class Player : MonoBehaviour
             Vector2 scale = transform.localScale;
             scale.x *= -1f;
             transform.localScale = scale;
+        }
+        if (Input.GetKeyDown(KeyCode.Space) && isTouchingWall)
+        {
+            Debug.Log("WallJumpCheck");
+            float pushDirection = transform.localScale.x > 0 ? -1f : 1f;
+            rb.linearVelocity = new Vector2(pushDirection * moveSpeed, maxJumpSpeed);           
         }
         PlayerJump();
 
@@ -97,16 +109,23 @@ public class Player : MonoBehaviour
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
         CheckWall();
 
-        if (transform.position.y < -14) // fall of the map
+        if (isTouchingWall)
         {
-            Die();
-            PlaySFX(deathClip, 0.1f);
+            //rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
+            rb.gravityScale = 0f;
+            Debug.Log("WallCheck");
         }
+        else
+        {
+            rb.gravityScale = 4f; // your normal gravity
+        }
+
     }
     //Method used to grab ledges
     private void CheckWall()
     {
         Vector2 direction = transform.localScale.x > 0 ? Vector2.right : Vector2.left;
+        
 
         isTouchingWall = Physics2D.Raycast(
             wallCheck.position,
@@ -114,6 +133,18 @@ public class Player : MonoBehaviour
             wallCheckDistance,
             groundLayer
         );
+
+        if (isTouchingWall)
+        {
+            //Debug.Log("TOUCHING WALL");
+            isTouchingWall = true;
+        }
+        else
+        {
+            isTouchingWall = false;
+        }
+
+        Debug.DrawRay(wallCheck.position, direction * wallCheckDistance, Color.red);
     }
 
     private void Attack()
@@ -123,12 +154,14 @@ public class Player : MonoBehaviour
         isAttacking = true;
 
         whipObject.SetActive(true);
+
+        whip.UseWhip();
     }
 
 
     public void PlayerJump()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded && !isTouchingWall)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
             isJumping = true;
@@ -180,7 +213,7 @@ public class Player : MonoBehaviour
     {
         if (isGrounded)
         {
-            if (moveInput == 0)
+            if (moveInput == 0 || isTouchingWall)
             {
                 animator.Play("Player_Idle");
             }
@@ -210,6 +243,10 @@ public class Player : MonoBehaviour
 
     public void TakeDamage(int amount = 1)
     {
+        if (isInvulnerable)
+            return;
+
+        isInvulnerable = true;
         PlaySFX(hurtClip, 0.1f);
         health -= 25 * amount;
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, maxJumpSpeed);
@@ -231,7 +268,8 @@ public class Player : MonoBehaviour
     private IEnumerator BlinkRed()
     {
         spriteRenderer.color = Color.red;
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.4f);
+        isInvulnerable = false;
         spriteRenderer.color = Color.white;
     }
 

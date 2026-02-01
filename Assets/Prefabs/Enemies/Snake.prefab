@@ -203,6 +203,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Snake
   speed: 4
   contactDamage: 1
+  spawnType: 0
+  health: 1
   groundCheck: {fileID: 2621853276100540023}
   groundCheckDistance: 0.2
   groundLayer:
@@ -410,7 +412,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.21859902, y: 0.7246472}
+  m_Offset: {x: -0.14570153, y: 0.7445284}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -420,5 +422,5 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.5559169, y: 0.05331123}
+  m_Size: {x: 0.7017119, y: 0.09307361}
   m_EdgeRadius: 0

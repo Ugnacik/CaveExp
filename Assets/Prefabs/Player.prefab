@@ -185,13 +185,14 @@ GameObject:
   - component: {fileID: 1068102112716894150}
   - component: {fileID: 483712025193754030}
   - component: {fileID: 3020844113211664274}
+  - component: {fileID: 9127174034580506800}
   m_Layer: 0
   m_Name: Whip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1410720892154927567
 Transform:
   m_ObjectHideFlags: 0
@@ -201,8 +202,8 @@ Transform:
   m_GameObject: {fileID: 2493089721515510524}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.7739, y: -0.0717, z: 0}
-  m_LocalScale: {x: 6.8095226, y: 1.7167978, z: 1}
+  m_LocalPosition: {x: 0.21, y: -0.119, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 778687838634254118}
@@ -241,17 +242,17 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.0028693527, y: 0.005785294}
+  m_Offset: {x: 0.31430745, y: 0.033307165}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.2, y: 0.2}
-    newSize: {x: 0.2, y: 0.2}
+    pivot: {x: 0, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.19544867, y: 0.20302139}
+  m_Size: {x: 0.8298023, y: 0.56110805}
   m_EdgeRadius: 0
 --- !u!212 &483712025193754030
 SpriteRenderer:
@@ -302,12 +303,12 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: 339074128f92b484687adf465ea6213e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.2, y: 0.2}
+  m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -324,6 +325,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 950dec6d6c82f7c41aa872c526e714f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Whip
+--- !u!95 &9127174034580506800
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2493089721515510524}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 027db21c12c31e7458f743aac1ab1bea, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &3229697202386930098
 GameObject:
   m_ObjectHideFlags: 0
@@ -380,7 +403,7 @@ Transform:
   m_GameObject: {fileID: 4392789666746876669}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.247, y: -0.307, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -501,7 +524,7 @@ Rigidbody2D:
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDamping: 0
-  m_AngularDamping: 0.05
+  m_AngularDamping: 0
   m_GravityScale: 4
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -528,10 +551,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Player
   health: 100
   moveSpeed: 10
-  jumpForce: 5
+  jumpForce: 6
   jumpHoldAcceleration: 50
   maxJumpHoldTime: 0.15
-  maxJumpSpeed: 20
+  maxJumpSpeed: 15
   groundCheck: {fileID: 1481452794576113271}
   groundLayer:
     serializedVersion: 2
@@ -541,6 +564,9 @@ MonoBehaviour:
   hurtClip: {fileID: 8300000, guid: 8b8969a39ab75ac47a84832db3cee149, type: 3}
   deathClip: {fileID: 8300000, guid: 9d44c4251044d1a4786c30c9bf1cc9f2, type: 3}
   whipObject: {fileID: 2493089721515510524}
+  wallCheck: {fileID: 8455562172376387407}
+  wallCheckDistance: 0.1
+  whip: {fileID: 3020844113211664274}
 --- !u!95 &6140389944367423647
 Animator:
   serializedVersion: 7

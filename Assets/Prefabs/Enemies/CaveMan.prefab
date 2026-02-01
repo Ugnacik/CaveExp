@@ -206,6 +206,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CaveMan
   speed: -8
   contactDamage: 1
+  spawnType: 0
+  health: 1
   wallCheck: {fileID: 2486150070675778336}
   wallCheckDistance: 0.2
   groundLayer:
@@ -312,7 +314,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.0022807121, y: 0.93601453}
+  m_Offset: {x: -0.016415954, y: 0.9604299}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -322,5 +324,5 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.511919, y: 0.118753135}
+  m_Size: {x: 0.64813113, y: 0.16758394}
   m_EdgeRadius: 0
