@@ -10,7 +10,6 @@ public class Bat : Enemy
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
-        speed = 3f;
         EnemyInit();
     }
 

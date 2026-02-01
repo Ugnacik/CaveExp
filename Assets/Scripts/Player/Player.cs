@@ -36,6 +36,22 @@ public class Player : MonoBehaviour
     private AudioSource audioSource;
 
     private SpriteRenderer spriteRenderer;
+
+    [SerializeField] private GameObject whipObject;
+    [SerializeField] private Transform wallCheck;
+    [SerializeField] private float wallCheckDistance = 0.1f;
+    private bool isTouchingWall;
+
+    private bool isWallGrabbing;
+    [SerializeField] private float wallSlideSpeed = 2f;
+
+
+
+
+    private bool isAttacking;
+    private float attackCooldown = 0.4f;
+    private float attackTimer;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -52,10 +68,6 @@ public class Player : MonoBehaviour
 
 
         // Flip the sprite based on movement direction
-        /*if (moveInput < 0f)
-        {
-            spriteRenderer.flipX = moveInput < 0f;
-        }*/
         if (moveInput < 0f && transform.localScale.x > 0f ||
             moveInput > 0f && transform.localScale.x < 0f)
         {
@@ -72,17 +84,47 @@ public class Player : MonoBehaviour
             healthImage.fillAmount = health / 100f;
         }
 
+        attackTimer -= Time.deltaTime;
 
-        if(transform.position.y < -14) // fall of the map
+        if (Input.GetKeyDown(KeyCode.X) && attackTimer <= 0f)
         {
-            Die();
-            PlaySFX(deathClip, 0.1f);
+            Debug.Log("Whip Pressed");
+            Attack();
         }
     }
     private void FixedUpdate()
     {
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        CheckWall();
+
+        if (transform.position.y < -14) // fall of the map
+        {
+            Die();
+            PlaySFX(deathClip, 0.1f);
+        }
     }
+    //Method used to grab ledges
+    private void CheckWall()
+    {
+        Vector2 direction = transform.localScale.x > 0 ? Vector2.right : Vector2.left;
+
+        isTouchingWall = Physics2D.Raycast(
+            wallCheck.position,
+            direction,
+            wallCheckDistance,
+            groundLayer
+        );
+    }
+
+    private void Attack()
+    {
+        attackTimer = attackCooldown;
+
+        isAttacking = true;
+
+        whipObject.SetActive(true);
+    }
+
 
     public void PlayerJump()
     {
@@ -195,10 +237,10 @@ public class Player : MonoBehaviour
 
     private void Die()
     {
-        //UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
         
-        //Dying is punished by restarting the game from the first level
-        UnityEngine.SceneManagement.SceneManager.LoadScene("Room");
+        //Dying is punished by restarting the game from the first level, but we haven't implemented more levels
+        //UnityEngine.SceneManagement.SceneManager.LoadScene("Room");
     }
 
     private void PlaySFX(AudioClip audioClip, float volume = 1f)

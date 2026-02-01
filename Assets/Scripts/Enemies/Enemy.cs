@@ -17,6 +17,20 @@ public class Enemy : MonoBehaviour
     public int ContactDamage => contactDamage;
     public EnemySpawnType spawnType = EnemySpawnType.Ground;
 
+    public int health = 1;
+
+    public void TakeDamage(int amount)
+    {
+        health -= amount;
+
+        if (health <= 0)
+            Die();
+    }
+
+    private void Die()
+    {
+        Destroy(gameObject);
+    }
 
     public void EnemyInit()
     {
