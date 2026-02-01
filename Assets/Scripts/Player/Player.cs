@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 
 public class Player : MonoBehaviour
@@ -53,6 +54,8 @@ public class Player : MonoBehaviour
     private float attackCooldown = 0.4f;
     private float attackTimer;
 
+    [SerializeField] private float mineDistance = 1.5f;
+    [SerializeField] private KeyCode mineKey = KeyCode.X;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -69,6 +72,11 @@ public class Player : MonoBehaviour
         if (!(isTouchingWall && !isGrounded))
         {
             rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
+        }
+
+        if (Input.GetKeyDown(mineKey))
+        {
+            MineBelow();
         }
 
 
@@ -146,6 +154,28 @@ public class Player : MonoBehaviour
 
         Debug.DrawRay(wallCheck.position, direction * wallCheckDistance, Color.red);
     }
+
+    private void MineBelow()
+    {
+        Tilemap[] tilemaps = FindObjectsByType<Tilemap>(FindObjectsSortMode.None);
+
+        foreach (Tilemap tilemap in tilemaps)
+        {
+            // Get position slightly below player center
+            Vector3 worldPos = transform.position + Vector3.down * 0.6f;
+
+            Vector3Int cellPos = tilemap.WorldToCell(worldPos);
+
+            if (tilemap.HasTile(cellPos))
+            {
+                tilemap.SetTile(cellPos, null);
+                return;
+            }
+        }
+    }
+
+
+
 
     private void Attack()
     {
