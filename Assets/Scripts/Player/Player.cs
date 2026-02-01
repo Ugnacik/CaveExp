@@ -98,7 +98,7 @@ public class Player : MonoBehaviour
 
         attackTimer -= Time.deltaTime;
 
-        if (Input.GetKeyDown(KeyCode.X) && attackTimer <= 0f)
+        if ((Input.GetKeyDown(KeyCode.Mouse0) || Input.GetKeyDown(KeyCode.V)) && attackTimer <= 0f)
         {
             Debug.Log("Whip Pressed");
             Attack();
