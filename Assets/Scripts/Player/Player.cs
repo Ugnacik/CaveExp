@@ -206,8 +206,10 @@ public class Player : MonoBehaviour
 
     public void Stomp()
     {
+        isInvulnerable = true;
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         PlaySFX(jumpClip, 0.1f);
+        StartCoroutine(Invulnerability());
     }
     private void SetAnimation(float moveInput)
     {
@@ -271,6 +273,12 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(0.4f);
         isInvulnerable = false;
         spriteRenderer.color = Color.white;
+    }
+
+    private IEnumerator Invulnerability()
+    {
+        yield return new WaitForSeconds(0.4f);
+        isInvulnerable = false;
     }
 
     private void Die()
